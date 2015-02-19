@@ -46,9 +46,11 @@ sed -i '/StrictModes/ c\StrictModes yes' /etc/ssh/sshd_config
 service ssh restart
 
 # Disable IPv6
-echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
-echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
-echo "net.ipv6.conf.lo.disable_ipv6 = 1" >> /etc/sysctl.conf
+cat <<END >> /etc/sysctl.conf
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+END
 
 # Log martians, deny ICMP routing
 sed -i '/net.ipv4.conf.all.log_martians/ c\net.ipv4.conf.all.log_martians = 1' /etc/sysctl.conf
@@ -77,7 +79,7 @@ sed -i '22s/600/1800/' /etc/fail2ban/jail.local
 sed -i '23s/.*/maxretry = 5/' /etc/fail2ban/jail.local
 sed -i '24s/.*/findtime = 1200/' /etc/fail2ban/jail.local
 sed -i '99s/6/5/' /etc/fail2ban/jail.local
-cat <<EOF >> /etc/fail2ban/jail.local
+cat <<FIN >> /etc/fail2ban/jail.local
 
 [ssh-repeater]
 enabled	= true
@@ -101,7 +103,7 @@ bantime	= 31536000
 #maxretry = 35
 #findtime = 31536000
 #bantime = 31536000
-EOF
+FIN
 touch /etc/fail2ban/action.d/iptables-repeater.conf
 cat <<endOFfile > /etc/fail2ban/action.d/iptables-repeater.conf
 # Fail2ban configuration file
@@ -186,8 +188,8 @@ rm /tmp/mycron
 # VMware Tools install
 mkdir /mnt/cdrom
 mount /dev/cdrom /mnt/cdrom
-VMWT=$(ls /mnt/cdrom/ | grep VMwareTools*)
-tar xzvf /mnt/cdrom/$VMWT -C /tmp/
+VMWT=$(ls /mnt/cdrom/VMwareTools*)
+tar xzvf /mnt/cdrom/"$VMWT" -C /tmp/
 /tmp/vmware-tools-distrib/vmware-install.pl -d
 
 # Reminder to install VMware Tools
