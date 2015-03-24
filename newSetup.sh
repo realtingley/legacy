@@ -4,33 +4,33 @@
 #set -x
 read -p "RUN AS SUDO This script will perform basic configuration, as well as security configuration. Please connect VMware Tools image to include in installation. THIS SCRIPT WILL REPLACE A LOT OF IMPORTANT FILES. Seriously. Run this only on new systems. Press [ENTER] to continue or ^C to exit."
 
-read -p "Configure this server to be on 50.247.195.80/28?" yn
-while true; do
-case $yn in
-	[Yy]* )
-		echo "What IP address will be assigned to this server?"
-		read ADDRESS
-		cat <<EOF > /etc/network/interfaces
+#read -p "Configure this server to be on 50.247.195.80/28?" yn
+#while true; do
+#case $yn in
+#	[Yy]* )
+#		echo "What IP address will be assigned to this server?"
+#		read ADDRESS
+#		cat <<EOF > /etc/network/interfaces
 # This file describes the network interfaces available on your system
 # and how to activate them. For more information, see interfaces(5).
-
+#
 # The loopback network interface
-auto lo
-iface lo inet loopback
-
+#auto lo
+#iface lo inet loopback
+#
 # The primary network interface
-auto eth0
-iface eth0 inet static
-address $ADDRESS
-netmask 255.255.255.240
-gateway 50.247.195.94
-dns-nameservers 8.8.8.8 8.8.4.4
-EOF
-		break;;
-	[Nn]* ) break;;
-	* ) echo "Please answer [y]es or [n]o." ;;
-esac
-done
+#auto eth0
+#iface eth0 inet static
+#address $ADDRESS
+#netmask 255.255.255.240
+#gateway 50.247.195.94
+#dns-nameservers 8.8.8.8 8.8.4.4
+#EOF
+#		break;;
+#	[Nn]* ) break;;
+#	* ) echo "Please answer [y]es or [n]o." ;;
+#esac
+#done
 
 # Update apt-get and upgrade any installed packages
 apt-get update && apt-get -y dist-upgrade
@@ -189,7 +189,7 @@ rm /tmp/mycron
 mkdir /mnt/cdrom
 mount /dev/cdrom /mnt/cdrom
 VMWT=$(ls /mnt/cdrom/VMwareTools*)
-tar xzvf /mnt/cdrom/"$VMWT" -C /tmp/
+tar xzvf "$VMWT" -C /tmp/
 /tmp/vmware-tools-distrib/vmware-install.pl -d
 
 # Reminder to install VMware Tools
