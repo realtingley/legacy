@@ -105,7 +105,7 @@ bantime	= 31536000
 #bantime = 31536000
 FIN
 touch /etc/fail2ban/action.d/iptables-repeater.conf
-cat <<endOFfile > /etc/fail2ban/action.d/iptables-repeater.conf
+cat <<"endOFfile" > /etc/fail2ban/action.d/iptables-repeater.conf
 # Fail2ban configuration file
 #
 # Author: Phil Hagen <phil@identityvector.com>
